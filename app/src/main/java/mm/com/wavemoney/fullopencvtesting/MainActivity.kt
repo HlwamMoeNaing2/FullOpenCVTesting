@@ -1,6 +1,7 @@
 package mm.com.wavemoney.fullopencvtesting
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -24,11 +25,10 @@ class MainActivity : AppCompatActivity() {
         }
        // OpenCVLoader.initLocal()
 
-        // Load OpenCV library from compressed assets
+        // Load OpenCV library with compression optimization
         val libraryLoaded = mm.com.wavemoney.fullopencvtesting.utils.NativeLibraryLoader.loadOpenCVLibrary(this)
         if (!libraryLoaded) {
-            // Fallback to system library if asset loading fails
-            System.loadLibrary("opencv_java4")
+            Log.e("MainActivity", "Failed to load OpenCV library")
         }
 
         // Obtain reference to the NavHostFragment

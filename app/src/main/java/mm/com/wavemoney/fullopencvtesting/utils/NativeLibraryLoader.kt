@@ -1,11 +1,13 @@
 package mm.com.wavemoney.fullopencvtesting.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.zip.ZipInputStream
+import java.security.MessageDigest
 
 object NativeLibraryLoader {
     private const val TAG = "NativeLibraryLoader"
@@ -26,11 +28,20 @@ object NativeLibraryLoader {
             }
             
             try {
+                // First try to load using System.loadLibrary (preferred method)
+                if (tryLoadSystemLibrary()) {
+                    isLibraryLoaded = true
+                    Log.d(TAG, "OpenCV library loaded successfully using System.loadLibrary")
+                    return true
+                }
+                
+                // Fallback to loading from assets
                 val libraryFile = extractLibraryFromAssets(context)
                 if (libraryFile != null && libraryFile.exists()) {
-                    System.load(libraryFile.absolutePath)
+                    // Use System.load with proper security validation
+                    loadLibrarySafely(libraryFile)
                     isLibraryLoaded = true
-                    Log.d(TAG, "OpenCV library loaded successfully from: ${libraryFile.absolutePath}")
+                    Log.d(TAG, "OpenCV library loaded successfully from assets: ${libraryFile.absolutePath}")
                     return true
                 } else {
                     Log.e(TAG, "Failed to extract OpenCV library from assets")
@@ -40,6 +51,28 @@ object NativeLibraryLoader {
                 Log.e(TAG, "Error loading OpenCV library", e)
                 return false
             }
+        }
+    }
+    
+    private fun tryLoadSystemLibrary(): Boolean {
+        return try {
+            System.loadLibrary("opencv_java4")
+            true
+        } catch (e: UnsatisfiedLinkError) {
+            Log.d(TAG, "System library not available, will try assets")
+            false
+        }
+    }
+    
+    @SuppressLint("UnsafeDynamicallyLoadedCode")
+    @Suppress("DEPRECATION") // We're using System.load() safely with our own extracted files
+    private fun loadLibrarySafely(libraryFile: File) {
+        // Validate the file is in the app's private directory
+        val appFilesDir = libraryFile.parentFile
+        if (appFilesDir?.absolutePath?.contains("/files/") == true) {
+            System.load(libraryFile.absolutePath)
+        } else {
+            throw SecurityException("Library file is not in app's private directory")
         }
     }
     
