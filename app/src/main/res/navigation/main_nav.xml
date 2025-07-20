@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav"
+    app:startDestination="@id/entryFragment">
+
+    <fragment
+        android:id="@+id/entryFragment"
+        android:name="mm.com.wavemoney.fullopencvtesting.EntryFragment"
+        android:label="fragment_entry"
+        tools:layout="@layout/fragment_entry" >
+        <action
+            android:id="@+id/action_entryFragment_to_faceDetectionFragment"
+            app:destination="@id/faceDetectionFragment" />
+        <action
+            android:id="@+id/action_entryFragment_to_cardDetectionFragment"
+            app:destination="@id/cardDetectionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cardDetectionFragment"
+        android:name="mm.com.wavemoney.fullopencvtesting.CardDetectionFragment"
+        android:label="fragment_card_detection"
+        tools:layout="@layout/fragment_card_detection" />
+    <fragment
+        android:id="@+id/faceDetectionFragment"
+        android:name="mm.com.wavemoney.fullopencvtesting.FaceDetectionFragment"
+        android:label="fragment_face_detection"
+        tools:layout="@layout/fragment_face_detection" />
+</navigation>

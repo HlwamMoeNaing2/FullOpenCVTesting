@@ -1,0 +1,43 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/commonAppBarMain"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFE512"
+    android:padding="16dp">
+
+    <!-- Start Icon -->
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/btn_app_bar_start_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/new_app_bar_back_arrow_icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Center Text -->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/center_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_app_bar_end_icon"
+        app:layout_constraintStart_toEndOf="@+id/btn_app_bar_start_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/app_name" />
+
+    <!-- End Icon -->
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/btn_app_bar_end_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/new_app_bar_question_icon"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/center_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/center_text" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

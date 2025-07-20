@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="OvalMaskView">
+        <attr name="ovalWidth" format="dimension" />
+        <attr name="ovalHeight" format="dimension" />
+        <attr name="borderColor" format="color" />
+    </declare-styleable>
+</resources>

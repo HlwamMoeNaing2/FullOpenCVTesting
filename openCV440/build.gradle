@@ -1,0 +1,65 @@
+apply plugin: 'com.android.library'
+//apply plugin: 'maven-publish'
+//apply plugin: 'com.github.dcendents.android-maven'
+
+group="com.zynkware"
+
+def openCVersionName = "4.4.0"
+def libraryVersionCode = 3
+
+//repositories {
+//    mavenCentral()
+//    google()
+//    jcenter()
+//    maven { url "https://jitpack.io" }
+//}
+
+android {
+    namespace 'org.opencv'
+    compileSdkVersion 34
+
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 35
+
+        versionCode libraryVersionCode
+        versionName openCVersionName
+
+        externalNativeBuild {
+            cmake {
+                arguments "-DANDROID_STL=c++_shared"
+                targets "opencv_jni_shared"
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            packagingOptions {
+                doNotStrip '**/*.so'  // controlled by OpenCV CMake scripts
+            }
+        }
+        release {
+            packagingOptions {
+                doNotStrip '**/*.so'  // controlled by OpenCV CMake scripts
+            }
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/java'
+        main.jniLibs.srcDirs = ['src/main/jniLibs']
+        main.res.srcDirs = ['src/main/res']
+        main.manifest.srcFile 'src/main/AndroidManifest.xml'
+    }
+
+    externalNativeBuild {
+        cmake {
+            path (project.projectDir.toString() + '/libcxx_helper/CMakeLists.txt')
+        }
+    }
+}
+

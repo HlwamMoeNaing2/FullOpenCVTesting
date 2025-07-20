@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".CardDetectionFragment">
+
+    <include
+        android:id="@+id/photo_id_app_bar"
+        layout="@layout/common_app_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_height="60dp"
+        tools:layout_width="match_parent" />
+
+
+    <FrameLayout
+        android:id="@+id/layoutPreview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="@dimen/_32dp"
+        android:background="@drawable/bg_border_white_16dp"
+        android:padding="@dimen/_2dp"
+        app:layout_constraintBottom_toTopOf="@+id/horizontal_guide"
+        app:layout_constraintDimensionRatio="295:193"
+        app:layout_constraintTop_toBottomOf="@+id/photo_id_app_bar"
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardCornerRadius="@dimen/_16dp">
+
+            <androidx.camera.view.PreviewView
+                android:id="@+id/previewView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <mm.com.wavemoney.fullopencvtesting.document_scanner.PolygonOverlay
+                android:id="@+id/polygonOverlay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivPreview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </androidx.cardview.widget.CardView>
+
+    </FrameLayout>
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.4" />
+
+
+    <!-- capture guide container -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/captureGuideContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_44dp"
+        android:layout_marginTop="@dimen/_16dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horizontal_guide">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardFocusing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="#3D3D3D"
+            app:cardCornerRadius="@dimen/_6dp"
+            app:layout_constraintEnd_toEndOf="@+id/captureGuideContainer"
+            app:layout_constraintStart_toStartOf="@+id/captureGuideContainer"
+            app:layout_constraintTop_toTopOf="@+id/captureGuideContainer">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cardFocusingChild"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/_20dp"
+                android:paddingVertical="@dimen/_16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvCaptureTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/wavemoney_white"
+                    app:layout_constraintEnd_toEndOf="@id/cardFocusingChild"
+                    app:layout_constraintStart_toStartOf="@id/cardFocusingChild"
+                    app:layout_constraintTop_toTopOf="@+id/cardFocusingChild"
+                    tools:text="ID Front" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivFocus"
+                    android:layout_width="@dimen/_32dp"
+                    android:layout_height="@dimen/_30dp"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="@+id/cardFocusingChild"
+                    app:layout_constraintStart_toStartOf="@+id/cardFocusingChild"
+                    app:layout_constraintTop_toBottomOf="@+id/tvCaptureTitle"
+                    app:srcCompat="@drawable/ic_focus_white" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvResultText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8dp"
+                    android:gravity="center"
+                    android:minLines="3"
+                    app:layout_constraintEnd_toEndOf="@id/cardFocusingChild"
+                    app:layout_constraintStart_toStartOf="@id/cardFocusingChild"
+                    app:layout_constraintTop_toBottomOf="@+id/ivFocus"
+                    tools:text="Too many faces detected. Please take a solo photo." />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btnCapture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardFocusing"
+            app:srcCompat="@drawable/ic_btn_capture" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btnFlash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/btnCapture"
+            app:layout_constraintEnd_toStartOf="@+id/btnCapture"
+            app:layout_constraintStart_toStartOf="@+id/captureGuideContainer"
+            app:layout_constraintTop_toTopOf="@+id/btnCapture"
+            app:srcCompat="@drawable/ic_flashsvg" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btnGallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/btnCapture"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnCapture"
+            app:layout_constraintTop_toTopOf="@+id/btnCapture"
+            app:srcCompat="@drawable/ic_gallery" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- submit and retake btn container -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lySubmitContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_44dp"
+        android:layout_marginTop="@dimen/_16dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horizontal_guide"
+
+        >
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSubmitTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="@+id/lySubmitContainer"
+            app:layout_constraintStart_toStartOf="@+id/lySubmitContainer"
+            app:layout_constraintTop_toTopOf="@+id/lySubmitContainer"
+            tools:text="Is the picture clear ?" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSubmitDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8dp"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="@id/lySubmitContainer"
+            app:layout_constraintStart_toStartOf="@id/lySubmitContainer"
+            app:layout_constraintTop_toBottomOf="@+id/tvSubmitTitle"
+            tools:text="Make sure your selfie has good lighting and captures your whole face." />
+
+
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_24dp"
+            android:layout_marginBottom="@dimen/_16dp"
+            android:padding="@dimen/_10dp"
+            android:text="@string/submit"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvSubmitDescription" />
+
+        <Button
+            android:id="@+id/btnRetake"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_12dp"
+            android:layout_marginBottom="@dimen/_16dp"
+
+            android:padding="10dp"
+            android:text="@string/retake"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnSubmit" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

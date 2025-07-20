@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/black"
+    tools:context=".FaceDetectionFragment">
+    <include
+        android:id="@+id/app_bar_live_photo"
+        layout="@layout/app_bar_camera_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_64dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Guideline 24dp below toolbar (toolbar height 64dp + 24dp) -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_camera_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/_88dp" />
+
+    <!-- 40% viewport guideline for camera bottom, start from below of app bar+ margin 24 -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_40"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.47" />
+
+    <!-- Camera Preview -->
+    <androidx.camera.view.PreviewView
+        android:id="@+id/cameraPreviewView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/guideline_40"
+        app:layout_constraintDimensionRatio="226:292"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline_camera_top" />
+
+    <!-- Captured Selfie (hidden behind mask) -->
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivSelfie"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/cameraPreviewView"
+        app:layout_constraintDimensionRatio="226:292"
+        app:layout_constraintEnd_toEndOf="@id/cameraPreviewView"
+        app:layout_constraintStart_toStartOf="@id/cameraPreviewView"
+        app:layout_constraintTop_toTopOf="@id/cameraPreviewView" />
+
+
+    <!-- Oval Mask Overlay -->
+    <mm.com.wavemoney.fullopencvtesting.face_helper.OvalMaskView
+        android:id="@+id/overlayView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:borderColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/cameraPreviewView"
+        app:layout_constraintDimensionRatio="226:292"
+        app:layout_constraintEnd_toEndOf="@id/cameraPreviewView"
+        app:layout_constraintStart_toStartOf="@id/cameraPreviewView"
+        app:layout_constraintTop_toTopOf="@id/cameraPreviewView" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lyFocusingMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_44dp"
+        android:layout_marginTop="@dimen/_16dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline_40"
+        tools:visibility="visible">
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardFocusing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="#3D3D3D"
+            app:cardCornerRadius="@dimen/_6dp"
+            app:layout_constraintEnd_toEndOf="@+id/lyFocusingMain"
+            app:layout_constraintStart_toStartOf="@+id/lyFocusingMain"
+            app:layout_constraintTop_toTopOf="@+id/lyFocusingMain">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/lyFocusingHolderChild"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/_20dp"
+                android:paddingVertical="@dimen/_16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+               >
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivFocus"
+                    android:layout_width="@dimen/_32dp"
+                    android:layout_height="@dimen/_30dp"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="@+id/lyFocusingHolderChild"
+                    app:layout_constraintStart_toStartOf="@+id/lyFocusingHolderChild"
+                    app:layout_constraintTop_toTopOf="@+id/lyFocusingHolderChild"
+                    app:srcCompat="@drawable/ic_focus_white" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivMultipleFaces"
+                    android:layout_width="@dimen/_32dp"
+                    android:layout_height="@dimen/_30dp"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="@+id/lyFocusingHolderChild"
+                    app:layout_constraintStart_toStartOf="@+id/lyFocusingHolderChild"
+                    app:layout_constraintTop_toTopOf="@+id/lyFocusingHolderChild"
+                    app:srcCompat="@drawable/ic_multiple_faces"
+                    tools:visibility="visible" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvResultText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8dp"
+                    android:gravity="center"
+                    android:minLines="3"
+
+                    app:layout_constraintEnd_toEndOf="@id/lyFocusingHolderChild"
+                    app:layout_constraintStart_toStartOf="@id/lyFocusingHolderChild"
+                    app:layout_constraintTop_toBottomOf="@+id/ivFocus"
+                    tools:text="Too many faces detected. Please take a solo photo." />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btnCapture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardFocusing"
+            app:srcCompat="@drawable/ic_btn_capture" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lySubmittingMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_44dp"
+        android:layout_marginTop="@dimen/_16dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cameraPreviewView"
+        tools:visibility="gone">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSubmitTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+
+            app:layout_constraintEnd_toEndOf="@+id/lySubmittingMain"
+            app:layout_constraintStart_toStartOf="@+id/lySubmittingMain"
+            app:layout_constraintTop_toTopOf="@+id/lySubmittingMain"
+            tools:text="Is the picture clear ?" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSubmitDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8dp"
+            android:gravity="center"
+
+            app:layout_constraintEnd_toEndOf="@id/lySubmittingMain"
+            app:layout_constraintStart_toStartOf="@id/lySubmittingMain"
+            app:layout_constraintTop_toBottomOf="@+id/tvSubmitTitle"
+            tools:text="Make sure your selfie has good lighting and captures your whole face." />
+
+
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_24dp"
+            android:layout_marginBottom="@dimen/_16dp"
+
+            android:padding="@dimen/_10dp"
+            android:text="@string/submit"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvSubmitDescription" />
+
+        <Button
+            android:id="@+id/btnRetake"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_12dp"
+            android:layout_marginBottom="@dimen/_16dp"
+            android:padding="10dp"
+            android:text="@string/retake"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnSubmit" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
