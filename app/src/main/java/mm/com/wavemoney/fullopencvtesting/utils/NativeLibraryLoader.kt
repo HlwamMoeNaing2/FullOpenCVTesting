@@ -77,7 +77,8 @@ object NativeLibraryLoader {
     }
     
     private fun extractLibraryFromAssets(context: Context): File? {
-        val libDir = File(context.filesDir, "native_libs")
+        //val libDir = File(context.filesDir, "native_libs")
+        val libDir = File(context.filesDir, "original_native_libs")
         if (!libDir.exists()) {
             libDir.mkdirs()
         }
@@ -91,7 +92,8 @@ object NativeLibraryLoader {
         
         // Get the appropriate architecture folder
         val archFolder = getArchitectureFolder()
-        val assetPath = "native_libs/$archFolder/$COMPRESSED_LIB_NAME"
+        // val assetPath = "native_libs/$archFolder/$COMPRESSED_LIB_NAME"
+        val assetPath = "original_native_libs/$archFolder/$COMPRESSED_LIB_NAME"
         
         try {
             context.assets.open(assetPath).use { inputStream ->
