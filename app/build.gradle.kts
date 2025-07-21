@@ -82,8 +82,8 @@ android {
 
 dependencies {
     val camerax_version = "1.3.1"
-    // implementation(project(":openCvsdk")) // Commented out to reduce APK size
-    implementation(project(":openCV440"))
+     implementation(project(":openCv411")) // Commented out to reduce APK size
+   // implementation(project(":openCV440"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

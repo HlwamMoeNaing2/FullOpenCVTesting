@@ -1,6 +1,6 @@
 package mm.com.wavemoney.fullopencvtesting.face_helper
 
-/*
+
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageFormat
@@ -89,4 +89,3 @@ enum class FaceResult {
     SINGLE, MULTIPLE, NO_FACE
 }
 
- */

@@ -24,3 +24,4 @@ rootProject.name = "FullOpenCVTesting"
 include(":app")
 //include(":openCvsdk")
 include(":openCV440")
+include(":openCv411")

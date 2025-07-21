@@ -28,10 +28,14 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import mm.com.wavemoney.fullopencvtesting.databinding.FragmentCardDetectionBinding
 import mm.com.wavemoney.fullopencvtesting.databinding.FragmentFaceDetectionBinding
+import mm.com.wavemoney.fullopencvtesting.face_helper.FaceDetectionHelper
+import mm.com.wavemoney.fullopencvtesting.face_helper.FaceResult
 
 import mm.com.wavemoney.fullopencvtesting.utils.setIcon
 import mm.com.wavemoney.fullopencvtesting.utils.setSystemNavigationBarColor
 import mm.com.wavemoney.fullopencvtesting.utils.updateStatusBarColor
+import org.opencv.android.OpenCVLoader
+import org.opencv.objdetect.CascadeClassifier
 //import org.opencv.android.OpenCVLoader
 //import org.opencv.objdetect.CascadeClassifier
 import pub.devrel.easypermissions.AppSettingsDialog
@@ -49,10 +53,10 @@ class FaceDetectionFragment : Fragment() , EasyPermissions.PermissionCallbacks{
 
 
 
-   // private var cascadeClassifier: CascadeClassifier? = null
-//    private val faceHelper: FaceDetectionHelper by lazy {
-//        FaceDetectionHelper()
-//    }
+    private var cascadeClassifier: CascadeClassifier? = null
+    private val faceHelper: FaceDetectionHelper by lazy {
+        FaceDetectionHelper()
+    }
 
     private val executor = Executors.newSingleThreadExecutor()
     private var lastDetectionTime = 0L
@@ -75,7 +79,7 @@ class FaceDetectionFragment : Fragment() , EasyPermissions.PermissionCallbacks{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         updateStatusBarColor(Color.BLACK)
-    //    initOpenCv()
+     initOpenCv()
         setupView()
         setupEvents()
         setupViewModel()
@@ -94,18 +98,18 @@ class FaceDetectionFragment : Fragment() , EasyPermissions.PermissionCallbacks{
         )
 
     }
-//    private fun initOpenCv() {
-//        OpenCVLoader.initLocal()
-//        val inputStream = resources.openRawResource(R.raw.haarcascade_frontalface_default)
-//        val cascadeDir = requireActivity().getDir("cascade", MODE_PRIVATE)
-//        val cascadeFile = File(cascadeDir, "haarcascade_frontalface_default.xml")
-//        val outputStream = FileOutputStream(cascadeFile)
-//        inputStream.copyTo(outputStream)
-//        inputStream.close()
-//        outputStream.close()
-//        cascadeClassifier = CascadeClassifier(cascadeFile.absolutePath)
-//        if (cascadeClassifier?.empty() == true) cascadeClassifier = null else cascadeDir.delete()
-//    }
+    private fun initOpenCv() {
+        OpenCVLoader.initLocal()
+        val inputStream = resources.openRawResource(R.raw.haarcascade_frontalface_default)
+        val cascadeDir = requireActivity().getDir("cascade", MODE_PRIVATE)
+        val cascadeFile = File(cascadeDir, "haarcascade_frontalface_default.xml")
+        val outputStream = FileOutputStream(cascadeFile)
+        inputStream.copyTo(outputStream)
+        inputStream.close()
+        outputStream.close()
+        cascadeClassifier = CascadeClassifier(cascadeFile.absolutePath)
+        if (cascadeClassifier?.empty() == true) cascadeClassifier = null else cascadeDir.delete()
+    }
     private fun setupView() {
         if (hasCameraPermission) {
             setTakeButtonEnable(true)
@@ -146,32 +150,32 @@ class FaceDetectionFragment : Fragment() , EasyPermissions.PermissionCallbacks{
             viewModel.updateDetectionObservation(CaptureBtnState(false, null))
         }
 
-//        binding.btnSubmit.setOnClickListener {
-//            binding.ivSelfie.drawable?.toBitmap()?.let { bmp ->
-//                executor.execute {
-//                    val safeBitmap = bmp.copy(Bitmap.Config.ARGB_8888, true)
-//                    val result = faceHelper.detectFaces(safeBitmap, cascadeClassifier)
-//                    when (result) {
-//                        FaceResult.SINGLE -> {
-////                            if (screenId == LOOK_UP_RESULT_FRAGMENT || screenId == SELFIE_NOT_MATCH_FRAGMENT) {
-////                                // todo add missing info for selfie condition in later
-////                                //if this conditions meet save and call create-subscriber api else only Save and navigate back
-////                                viewModel.saveBitmap(bmp, false)
-////
-////                            } else {
-////                                viewModel.saveBitmap(bmp, true)
-////                            }
+        binding.btnSubmit.setOnClickListener {
+            binding.ivSelfie.drawable?.toBitmap()?.let { bmp ->
+                executor.execute {
+                    val safeBitmap = bmp.copy(Bitmap.Config.ARGB_8888, true)
+                    val result = faceHelper.detectFaces(safeBitmap, cascadeClassifier)
+                    when (result) {
+                        FaceResult.SINGLE -> {
+//                            if (screenId == LOOK_UP_RESULT_FRAGMENT || screenId == SELFIE_NOT_MATCH_FRAGMENT) {
+//                                // todo add missing info for selfie condition in later
+//                                //if this conditions meet save and call create-subscriber api else only Save and navigate back
+//                                viewModel.saveBitmap(bmp, false)
 //
-//                        }
-//
-//                        else -> {
-//                            Log.d("##facee", "setupEvents: No Face Found")
-//                        }
-//
-//                    }
-//                }
-//            }
-//        }
+//                            } else {
+//                                viewModel.saveBitmap(bmp, true)
+//                            }
+
+                        }
+
+                        else -> {
+                            Log.d("##facee", "setupEvents: No Face Found")
+                        }
+
+                    }
+                }
+            }
+        }
     }
     private fun observeFaceDetectionStateAndUpdateUi() {
         viewModel.isNeedStopFaceDetection.observe(viewLifecycleOwner) {
@@ -285,56 +289,56 @@ class FaceDetectionFragment : Fragment() , EasyPermissions.PermissionCallbacks{
             return
         }
         lastDetectionTime = now
-      //  val getRotatedBitmap = faceHelper.processImage(image)
-        //detectFaces(getRotatedBitmap)
+        val getRotatedBitmap = faceHelper.processImage(image)
+        detectFaces(getRotatedBitmap)
     }
 
 
-//    private fun detectFaces(bitmap: Bitmap) {
-//
-//        val detectingResult = faceHelper.detectFaces(bitmap, cascadeClassifier)
-//        when (detectingResult) {
-//            FaceResult.SINGLE -> {
-//                consecutiveValidDetections++
-//                if (consecutiveValidDetections >= REQUIRED_CONSECUTIVE_DETECTIONS) {
-//                    viewModel.updateFaceDetectionState(
-//                        isInitialState = false,
-//                        detectionResult = "Capture Now",
-//                        isMultipleFaces = false,
-//                        isDetectionReady = true
-//                    )
-//                } else {
-//                    viewModel.updateFaceDetectionState(
-//                        isInitialState = false,
-//                        detectionResult = "NO Face",
-//                        isMultipleFaces = false,
-//                        isDetectionReady = false
-//                    )
-//                }
-//            }
-//
-//            FaceResult.MULTIPLE -> {
-//                consecutiveValidDetections = 0
-//                viewModel.updateFaceDetectionState(
-//                    isInitialState = false,
-//                    detectionResult = "Multi face",
-//                    isMultipleFaces = true,
-//                    isDetectionReady = false
-//                )
-//            }
-//
-//            FaceResult.NO_FACE -> {
-//                consecutiveValidDetections = 0
-//                viewModel.updateFaceDetectionState(
-//                    isInitialState = false,
-//                    detectionResult = "No Face",
-//                    isMultipleFaces = false,
-//                    isDetectionReady = false
-//                )
-//            }
-//        }
-//
-//    }
+    private fun detectFaces(bitmap: Bitmap) {
+
+        val detectingResult = faceHelper.detectFaces(bitmap, cascadeClassifier)
+        when (detectingResult) {
+            FaceResult.SINGLE -> {
+                consecutiveValidDetections++
+                if (consecutiveValidDetections >= REQUIRED_CONSECUTIVE_DETECTIONS) {
+                    viewModel.updateFaceDetectionState(
+                        isInitialState = false,
+                        detectionResult = "Capture Now",
+                        isMultipleFaces = false,
+                        isDetectionReady = true
+                    )
+                } else {
+                    viewModel.updateFaceDetectionState(
+                        isInitialState = false,
+                        detectionResult = "NO Face",
+                        isMultipleFaces = false,
+                        isDetectionReady = false
+                    )
+                }
+            }
+
+            FaceResult.MULTIPLE -> {
+                consecutiveValidDetections = 0
+                viewModel.updateFaceDetectionState(
+                    isInitialState = false,
+                    detectionResult = "Multi face",
+                    isMultipleFaces = true,
+                    isDetectionReady = false
+                )
+            }
+
+            FaceResult.NO_FACE -> {
+                consecutiveValidDetections = 0
+                viewModel.updateFaceDetectionState(
+                    isInitialState = false,
+                    detectionResult = "No Face",
+                    isMultipleFaces = false,
+                    isDetectionReady = false
+                )
+            }
+        }
+
+    }
 
     private fun resetFaceDetectionValues() {
         lastDetectionTime = 0L

@@ -1,0 +1,4 @@
+/Users/hlwanmoenaing/Library/Android/sdk/cmake/3.22.1/bin/ninja \
+  -C \
+  "/Users/hlwanmoenaing/Desktop/Testing App/FullOpenCVTesting/openCv411/.cxx/Debug/5548154g/arm64-v8a" \
+  opencv_jni_shared
