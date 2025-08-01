@@ -103,4 +103,5 @@ dependencies {
     implementation("androidx.camera:camera-video:${camerax_version}")
     implementation("androidx.camera:camera-extensions:${camerax_version}")
     implementation("pub.devrel:easypermissions:3.0.0")
+    implementation("com.google.mlkit:face-detection:16.1.7")
 }
